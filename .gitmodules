@@ -1,0 +1,3 @@
+[submodule "songfest-common"]
+	path = songfest-common
+	url = https://github.com/Luominai/songfest-common
