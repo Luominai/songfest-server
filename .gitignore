@@ -129,13 +129,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Typescript map file things?
-common/types/*.js
-common/classes/*.js
-common/types/*.d.*
-common/classes/*.d.*
-common/index.d.ts
-common/index.d.ts.map
-common/index.js
-common/apikey.*
-common/lib/
+songfest-common
