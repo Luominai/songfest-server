@@ -48,10 +48,13 @@ export default function registerHandler(socket: Socket<ClientToServerEvents, Ser
         const playerTheyWantToSwitchTo = songfest.getPlayerByName(name)
         // get the player corresponding to the socket id
         const playerTheyAreCurrently = songfest.getPlayerBySocketId(socket.id)
-        // deregister the currently selected player
-        playerTheyAreCurrently.setOwnership(null)
+        // deregister the currently selected player if they exist
+        if (playerTheyAreCurrently) {
+            playerTheyAreCurrently.setOwnership(null)
+        }
     
         if (playerTheyWantToSwitchTo != playerTheyAreCurrently) {
+            playerTheyWantToSwitchTo.setOwnership(socket.id)
             socket.emit("updateState", {myPlayer: playerTheyWantToSwitchTo})
         }
         else {
@@ -76,6 +79,8 @@ export default function registerHandler(socket: Socket<ClientToServerEvents, Ser
         const player = songfest.getPlayerBySocketId(socket.id)
         // check if the player exists
         if (!player) {
+            console.log("player with socket: ", socket.id, " not found")
+            console.log("valid sockets are: ", songfest.players.map(entry => entry.socketId))
             return
         }
         // tell client if the current song submitter matches this player
@@ -125,6 +130,6 @@ export default function registerHandler(socket: Socket<ClientToServerEvents, Ser
     })
     socket.on("nextPhase", () => {
         songfest.nextPhase()
-        socket.emit("updateState", songfest.toClientState())
+        io.emit("updateState", songfest.toClientState())
     })
 }
